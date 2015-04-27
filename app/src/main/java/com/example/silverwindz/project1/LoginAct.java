@@ -1,15 +1,28 @@
 package com.example.silverwindz.project1;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginAct extends ActionBarActivity {
@@ -44,7 +57,7 @@ public class LoginAct extends ActionBarActivity {
                     tt.show();
                 }
                 else {
-                    if(user.) {
+                    if(user==GET['username']) {
                         i = new Intent(this, MainActivity.class);
                         i.putExtra("user", user);
                         startActivity(i);
@@ -63,6 +76,71 @@ public class LoginAct extends ActionBarActivity {
                 break;
         }
 
+    }
+    class LoadMessageTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            BufferedReader reader;
+            StringBuilder buffer = new StringBuilder();
+            String line;
+
+            try {
+                Log.e("LoadMessageTask", "" );
+                URL u = new URL("http://ict.siit.tu.ac.th/~u5522790500/fetch.php");
+                HttpURLConnection h = (HttpURLConnection)u.openConnection();
+                h.setRequestMethod("GET");
+                h.setDoInput(true);
+                h.connect();
+
+                int response = h.getResponseCode();
+                if (response == 200) {
+                    reader = new BufferedReader(new InputStreamReader(h.getInputStream()));
+                    while((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    Log.e("LoadMessageTask", buffer.toString());
+
+
+
+                    JSONObject json = new JSONObject(buffer.toString());
+                    JSONArray Msg = json.getJSONArray("msg");
+                    int MsgLength;
+                    int i ;
+                    JSONObject onemsg;
+                    MsgLength = Msg.length();
+                    for(i=0 ; i<MsgLength ; i++)
+                    {
+                        onemsg = Msg.getJSONObject(i);
+                        Map<String, String> item = new HashMap<String, String>();
+                        item.put("username", onemsg.getString("username"));
+                        item.put("pass", onemsg.getString("pass"));
+                    }
+                    //timestamp = json.getInt("timestamp");
+                    return true;
+                }
+            } catch (MalformedURLException e) {
+                Log.e("LoadMessageTask", "Invalid URL");
+            } catch (IOException e) {
+                Log.e("LoadMessageTask", "I/O Exception");
+            } catch (JSONException e) {
+                Log.e("LoadMessageTask", "Invalid JSON");
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                /*adapter.notifyDataSetChanged();
+                lastUpdate = System.currentTimeMillis();
+                Toast t = Toast.makeText(MessageActivity.this.getApplicationContext(),
+                        "Updated the timeline",
+                        Toast.LENGTH_SHORT);
+                t.show();*/
+            }
+        }
     }
 
     @Override
