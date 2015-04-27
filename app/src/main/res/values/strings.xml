@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Project1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_bmrcal">BMRcal</string>
+    <string name="title_activity_exercal">Exercal</string>
+    <string name="title_activity_exercise_list">exercise_list</string>
+    <string name="title_activity_information">information</string>
+    <string name="title_activity_calorie2_dbhelper">Calorie2DBHelper</string>
+    <string name="name1">Calories Calculator</string>
+string>        <string name="name2">BMR Calculator</string>
+string>        <string name="name3">Calories Calculator</string>
+string>        <string name="name4">ATTEMPT List</string>
+string>        <string name="name5">Information</string>
+string>        <string name="title_activity_register">RegisterAct</string>
+    <string name="title_activity_main">MainActivity</string>
+
+</resources>
